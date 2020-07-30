@@ -31,17 +31,14 @@ services:
     entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "rs0" ]
 
   mongosetup:
-    image: mongo
+    image: registry.tce.ro.gov.br/mongo-cluster-setup:v1.0.0
     depends_on:
       - mongo1
       - mongo2
       - mongo3
-    volumes:
-      - .:/scripts
     restart: "no"
     networks: 
       - app
-    entrypoint: [ "bash", "/scripts/mongo_setup.sh"]
 
 networks:
   app: 
