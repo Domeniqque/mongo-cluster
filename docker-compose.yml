@@ -4,8 +4,6 @@ services:
   mongo1:
     hostname: mongo1
     image: mongo
-    ports:
-      - 28017:28017
     restart: always
     networks: 
       - app
@@ -14,8 +12,6 @@ services:
   mongo2:
     hostname: mongo2
     image: mongo
-    ports:
-      - 28018:28018
     restart: always
     networks: 
       - app
@@ -24,14 +20,12 @@ services:
   mongo3:
     hostname: mongo3
     image: mongo
-    ports:
-      - 28019:28019
     networks: 
       - app
     entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "rs0" ]
 
   mongosetup:
-    image: registry.tce.ro.gov.br/mongo-cluster-setup:v1.0.0
+    image: registry.tce.ro.gov.br/mongo-cluster-setup:v1.0.1
     depends_on:
       - mongo1
       - mongo2
