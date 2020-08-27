@@ -1,4 +1,4 @@
-FROM mongo:latest
+FROM mongo:3.6.19-xenial
 WORKDIR /scripts
 
 COPY ./mongo_setup.sh ./

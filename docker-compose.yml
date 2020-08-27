@@ -3,7 +3,7 @@ version: "3.6"
 services:
   mongo1:
     hostname: mongo1
-    image: mongo
+    image: mongo:3.6.19-xenial
     restart: always
     networks: 
       - app
@@ -11,7 +11,7 @@ services:
 
   mongo2:
     hostname: mongo2
-    image: mongo
+    image: mongo:3.6.19-xenial
     restart: always
     networks: 
       - app
@@ -19,7 +19,7 @@ services:
 
   mongo3:
     hostname: mongo3
-    image: mongo
+    image: mongo:3.6.19-xenial
     networks: 
       - app
     entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "rs0" ]

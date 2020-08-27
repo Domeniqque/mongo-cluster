@@ -1,6 +1,6 @@
 #!/bin/bash
 echo "sleeping for 10 seconds"
-sleep 10
+sleep 30
 
 echo mongo_setup.sh time now: `date +"%T" `
 
@@ -16,12 +16,12 @@ mongo --host mongo1 <<EOF
       {
         "_id": 1,
         "host": "mongo2",
-	      "priority": 0,
+	      "priority": 1,
       },
       {
         "_id": 2,
         "host": "mongo3",
-	      "priority": 0,
+	      "priority": 1,
       }
     ]
   };
