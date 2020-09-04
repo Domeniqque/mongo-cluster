@@ -1,6 +1,18 @@
 version: "3.6"
 
 services:
+  mongosetup:
+    image: mongo
+    depends_on:
+      - mongo1
+      - mongo2
+    volumes:
+      - .:/scripts
+    restart: on-failure
+    networks:
+      - my-mongo-cluster
+    entrypoint: [ "bash", "/scripts/mongo_setup.sh"]
+
   mongo1:
     hostname: mongo1
     container_name: localmongo1
@@ -9,50 +21,30 @@ services:
       - 27017:27017
     expose:
       - 27017
-    restart: always
-    networks: 
+    networks:
       - my-mongo-cluster
-    entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "rs0" ]
+    entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "rs0", "--journal", "--dbpath", "/data/db", "--enableMajorityReadConcern", "false" ]
+    volumes:
+      - mongo1_data:/data/db
 
   mongo2:
     hostname: mongo2
     container_name: localmongo2
     image: mongo
     ports:
-      - 27018:27018
+      - 27018:27017
     expose:
-      - 27018
-    restart: always
-    networks: 
+      - 27017
+    networks:
       - my-mongo-cluster
-    entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "rs0" ]
-
-  mongo3:
-    hostname: mongo3
-    container_name: localmongo3
-    image: mongo
-    ports:
-      - 27019:27019
-    expose:
-      - 27019
-    restart: always
-    networks: 
-      - my-mongo-cluster
-    entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "rs0" ]
-
-  mongosetup:
-    image: mongo
-    depends_on:
-      - mongo1
-      - mongo2
-      - mongo3
+    entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "rs0", "--journal", "--dbpath", "/data/db", "--enableMajorityReadConcern", "false" ]
     volumes:
-      - .:/scripts
-    restart: "no"
-    networks: 
-      - my-mongo-cluster
-    entrypoint: [ "bash", "/scripts/mongo_setup.sh"]
+      - mongo2_data:/data/db
 
-networks: 
+networks:
   my-mongo-cluster:
     driver: bridge
+
+volumes:
+  mongo1_data:
+  mongo2_data:
