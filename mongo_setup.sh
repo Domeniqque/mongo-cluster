@@ -18,7 +18,6 @@ echo mongo_setup.sh time now: `date +"%T" `
 mongo --host mongo1:27017 <<EOF
   var cfg = {
   "_id": "rs0",
-  "writeConcernMajorityJournalDefault" : true,
   "members": [
       {
         "_id": 0,
@@ -30,10 +29,7 @@ mongo --host mongo1:27017 <<EOF
         "host": "mongo2:27017",
 	      "priority": 0,
       }
-    ],
-    settings: {
-      chainingAllowed: true
-    }
+    ]
   };
 
   rs.initiate(cfg, { force: true });
