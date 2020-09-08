@@ -1,0 +1,42 @@
+version: "3.6"
+
+services:
+  mongosetup:
+    image: registry.tce.ro.gov.br/mongo-cluster-setup:v1.1.0
+    restart: "on-failure"
+    depends_on:
+      - mongo1
+      - mongo2
+    networks:
+      - app
+
+  mongo1:
+    hostname: mongo1
+    image: mongo
+    restart: "always"
+    networks:
+      - app
+    entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "rs0", "--journal", "--dbpath", "/data/db", "--enableMajorityReadConcern", "false"]
+    volumes:
+      - mongo1_data:/data/db
+
+  mongo2:
+    hostname: mongo2
+    image: mongo
+    restart: "always"
+    networks:
+      - app
+    entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "rs0", "--journal", "--dbpath", "/data/db", "--enableMajorityReadConcern", "false"]
+    volumes:
+      - mongo2_data:/data/db
+
+networks:
+  app:
+    external: true
+
+volumes:
+  mongo1_data:
+    driver: local
+
+  mongo2_data:
+    driver: local

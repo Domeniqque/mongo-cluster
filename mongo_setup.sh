@@ -8,6 +8,11 @@ until curl http://mongo1:27017/serverStatus\?text\=1 2>&1 | grep uptime | head -
   sleep 2
 done
 
+until curl http://mongo2:27017/serverStatus\?text\=1 2>&1 | grep uptime | head -1; do
+  printf '.'
+  sleep 2
+done
+
 echo mongo_setup.sh time now: `date +"%T" `
 
 mongo --host mongo1:27017 <<EOF
