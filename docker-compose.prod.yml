@@ -12,23 +12,36 @@ services:
 
   mongo1:
     hostname: mongo1
-    image: mongo
+    image: mongo:4.4.0-bionic
     restart: "always"
     networks:
       - app
-    entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "rs0", "--journal", "--dbpath", "/data/db", "--enableMajorityReadConcern", "false"]
+    entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "rs0", "--journal", "--dbpath", "/data/db", "--enableMajorityReadConcern", "true"]
     volumes:
-      - mongo1_data:/data/db
+      - mongo1_data/db:/data/db
+      - mongo1_data/configdb:/data/db
 
   mongo2:
     hostname: mongo2
-    image: mongo
+    image: mongo:4.4.0-bionic
     restart: "always"
     networks:
       - app
-    entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "rs0", "--journal", "--dbpath", "/data/db", "--enableMajorityReadConcern", "false"]
+    entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "rs0", "--journal", "--dbpath", "/data/db", "--enableMajorityReadConcern", "true"]
     volumes:
-      - mongo2_data:/data/db
+      - mongo2_data/db:/data/db
+      - mongo2_data/configdb:/data/db
+
+  mongo3:
+    hostname: mongo3
+    image: mongo:4.4.0-bionic
+    restart: "always"
+    networks:
+      - app
+    entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "rs0", "--journal", "--dbpath", "/data/db", "--enableMajorityReadConcern", "true"]
+    volumes:
+      - mongo3_data/db:/data/db
+      - mongo3_data/configdb:/data/db
 
 networks:
   app:
@@ -37,6 +50,7 @@ networks:
 volumes:
   mongo1_data:
     driver: local
-
   mongo2_data:
+    driver: local
+  mongo3_data:
     driver: local
