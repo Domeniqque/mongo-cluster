@@ -2,11 +2,12 @@ version: "3.6"
 
 services:
   mongosetup:
-    image: registry.tce.ro.gov.br/mongo-cluster-setup:v1.1.0
+    image: registry.tce.ro.gov.br/mongo-cluster-setup:v1.3.2
     restart: "on-failure"
     depends_on:
       - mongo1
       - mongo2
+      - mongo3
     networks:
       - app
 
@@ -16,10 +17,9 @@ services:
     restart: "always"
     networks:
       - app
-    entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "rs0", "--journal", "--dbpath", "/data/db", "--enableMajorityReadConcern", "true"]
+    entrypoint: ["/usr/bin/mongod", "--bind_ip_all", "--replSet", "rs0", "--journal", "--enableMajorityReadConcern", "true"]
     volumes:
-      - mongo1_data/db:/data/db
-      - mongo1_data/configdb:/data/db
+      - mongo1_data:/data
 
   mongo2:
     hostname: mongo2
@@ -27,10 +27,9 @@ services:
     restart: "always"
     networks:
       - app
-    entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "rs0", "--journal", "--dbpath", "/data/db", "--enableMajorityReadConcern", "true"]
+    entrypoint: ["/usr/bin/mongod", "--bind_ip_all", "--replSet", "rs0", "--journal", "--enableMajorityReadConcern", "true"]
     volumes:
-      - mongo2_data/db:/data/db
-      - mongo2_data/configdb:/data/db
+      - mongo2_data:/data
 
   mongo3:
     hostname: mongo3
@@ -38,10 +37,9 @@ services:
     restart: "always"
     networks:
       - app
-    entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "rs0", "--journal", "--dbpath", "/data/db", "--enableMajorityReadConcern", "true"]
+    entrypoint: ["/usr/bin/mongod", "--bind_ip_all", "--replSet", "rs0", "--journal", "--enableMajorityReadConcern", "true"]
     volumes:
-      - mongo3_data/db:/data/db
-      - mongo3_data/configdb:/data/db
+      - mongo3_data:/data
 
 networks:
   app:

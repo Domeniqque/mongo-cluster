@@ -2,7 +2,7 @@ version: "3.6"
 
 services:
   mongosetup:
-    image: mongo
+    image: mongo:latest
     depends_on:
       - mongo1
       - mongo2
@@ -16,7 +16,7 @@ services:
   mongo1:
     hostname: mongo1
     container_name: localmongo1
-    image: mongo
+    image: mongo:latest
     ports:
       - 27017:27017
     expose:
@@ -30,7 +30,7 @@ services:
   mongo2:
     hostname: mongo2
     container_name: localmongo2
-    image: mongo
+    image: mongo:latest
     ports:
       - 27018:27017
     expose:
@@ -41,6 +41,20 @@ services:
     volumes:
       - mongo2_data:/data/db
 
+  mongo3:
+    hostname: mongo3
+    container_name: localmongo3
+    image: mongo:latest
+    ports:
+      - 27019:27017
+    expose:
+      - 27017
+    networks:
+      - my-mongo-cluster
+    entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "rs0", "--journal", "--dbpath", "/data/db", "--enableMajorityReadConcern", "false" ]
+    volumes:
+      - mongo3_data:/data/db
+
 networks:
   my-mongo-cluster:
     driver: bridge
@@ -48,3 +62,4 @@ networks:
 volumes:
   mongo1_data:
   mongo2_data:
+  mongo3_data:

@@ -1,4 +1,4 @@
-FROM mongo:4.4.0-bionic
+FROM mongo:4.2.9-bionic
 WORKDIR /scripts
 
 COPY ./mongo_setup.sh ./
